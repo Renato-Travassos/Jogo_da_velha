@@ -1,2 +1,3 @@
 # Jogo_da_velha
-teste
+um jogo da velha qualquer 
+seguindo regras básicas e tudo mais.
