@@ -1,0 +1,71 @@
+let tabela=[['','',''],['','',''],['','','']]
+const board =[...document.querySelectorAll('.bloco')] 
+let resultado=document.querySelector('#resultado')
+let forma = true;
+let vez=0
+
+function limpar() {
+  for (bloco of tabela) {
+    for (i = 0; i < bloco.length; i++) {
+        bloco[i] = '';
+         
+
+    }
+  }
+}
+
+function atualizar_tabela() {
+ 
+ resultado.innerHTML=''
+
+  tabela.forEach((linha, i, array) => {
+    const coluna1 = array[0];
+    const coluna2 = array[1];
+    const coluna3 = array[2];
+    const horizontal_x = linha.every((val) => val === 'X');
+    const horizontal_o = linha.every((val) => val === 'O');
+    const vertical = coluna1[i] === coluna2[i] && coluna2[i] === coluna3[i] && coluna1[i] !== '';  
+    const inclinado_direita = coluna1[0] === coluna2[1] && coluna2[1] === coluna3[2] && coluna2[1] !== '';
+    const inclinado_esquerda = coluna1[2] === coluna2[1] && coluna2[1] === coluna3[0] && coluna2[1] !== '';
+    const preenchido = array.every(linha => linha.every(el => el !== ''))  
+   
+    if (horizontal_x || horizontal_o  || vertical || inclinado_direita || inclinado_esquerda ){
+      resultado.innerHTML=vez+' ganhou' 
+      limpar() 
+    }else if(preenchido){
+      limpar()
+    } 
+    alocar_valores();
+  });
+}
+
+function alocar_valores() {
+  for(c=0;c<tabela.length;c++){
+    for(l=0;l<tabela.length;l++){
+      board[c * 3 + l].innerHTML = tabela[c][l];
+    }
+  }
+}
+
+board.forEach((el,id)=>{
+ 
+  let elemento=document.createElement('button')
+  elemento.innerHTML=''
+  el.innerHTML= elemento.textContent
+ 
+  el.setAttribute('data-indice', id);
+  
+  el.addEventListener("click",(evt)=>{
+    const indice= evt.target.getAttribute('data-indice')
+    const linha = Math.floor(indice / 3);   
+    const coluna = indice % 3;  
+         
+    escolhido=evt.target.innerHTML= forma ? 'X':'O'; 
+    vez=escolhido       
+    tabela[linha][coluna]=escolhido
+    forma=!forma;
+    atualizar_tabela()
+    
+
+  });
+})
